@@ -47,15 +47,33 @@ df_projects = pd.DataFrame(projects_data)
 print(df_employees.head(5))
 
 # How many employees are there in each department?
-employees_departments = df_employees['department_name']
-departments = emloy
+print("Number of employees per department")
+print(df_employees['department_name'].value_counts())
 
 # What is the average salary in the company?
+print("The means salary is", df_employees['salary ($)'].mean())
+
 # List all employees with salaries above $100,000.
+big_salary_employees = df_employees[df_employees['salary ($)'] > 100000]
+print("Employees making > 100,000 $:")
+print(big_salary_employees)
+
 # Who is the manager of the 'Development' department?
+print("The manager of the Development department is:")
+print(df_departments[df_departments['department_name'] == 'Development']['manager'])
+
 # Merge df_employees with df_departments to include the manager's name for each employee.
+newdf = pd.merge(df_employees, df_departments, on = 'department_name', how = 'left')
+print("Merged df:")
+print(newdf.head())
+
 # Which department has the highest average salary?
+print("Average salaries by department:")
+print(df_employees.groupby('department_name')['salary ($)'].mean().sort_values(ascending=False))
+
 # Create a new column in df_employees that categorizes salaries into 'Low', 'Medium', and 'High' (define the ranges yourself).
+
+
 # Find the total budget of projects for the 'Research' department.
 # How many projects does each department have?
 # What is the total number of employees working on projects (assuming each project has an equal number of employees from the relevant department)?
@@ -63,3 +81,8 @@ departments = emloy
 # Sort the df_projects DataFrame by budget in descending order and display the top 3 most expensive projects.
 # Merge df_projects with df_departments on department_name and display the result.
 # For each department, find the project with the largest budget and list its code and budget amount.
+# Calculate the average budget per employee in each department.
+# Find the total salary expense for each department where the department manager's name starts with 'Manager_1'.
+# Determine the total and average salary of employees for each project, considering only projects with budgets over $30,000.
+# For each manager, find out the total number of employees and the average budget of the projects in their department.
+# Create a summary table that shows, for each department, the number of projects and the average salary of employees who earn more than the average salary in their department.
