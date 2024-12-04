@@ -1,0 +1,65 @@
+import pandas as pd
+import numpy as np
+
+# Employees DataFrame
+employee_ids = list(range(1, 101))
+names = ["Employee_" + str(i) for i in employee_ids]
+department_names = np.random.choice(['HR', 'Development', 'Research', 'Marketing'], 100)
+salaries = np.random.randint(50000, 120000, 100)
+
+employees_data = {
+    'employee_id': employee_ids,
+    'name': names,
+    'department_name': department_names,
+    'salary ($)': salaries
+}
+
+df_employees = pd.DataFrame(employees_data)
+
+# Departments DataFrame
+department_ids = list(range(1, 5))
+department_names = ['HR', 'Development', 'Research', 'Marketing']
+managers = ["Manager_" + str(i) for i in department_ids]
+
+departments_data = {
+    'department_id': department_ids,
+    'department_name': department_names,
+    'manager': managers
+}
+
+df_departments = pd.DataFrame(departments_data)
+
+# Projects DataFrame
+project_codes = ["P" + str(i).zfill(3) for i in range(1, 21)]
+project_departments = np.random.choice(department_names, 20)
+budgets = np.random.randint(10000, 50000, 20)
+
+projects_data = {
+    'project_code': project_codes,
+    'department_name': project_departments,
+    'budget ($)': budgets
+}
+
+df_projects = pd.DataFrame(projects_data)
+
+
+# Display the first 5 rows of the df_employees DataFrame.
+print(df_employees.head(5))
+
+# How many employees are there in each department?
+employees_departments = df_employees['department_name']
+departments = emloy
+
+# What is the average salary in the company?
+# List all employees with salaries above $100,000.
+# Who is the manager of the 'Development' department?
+# Merge df_employees with df_departments to include the manager's name for each employee.
+# Which department has the highest average salary?
+# Create a new column in df_employees that categorizes salaries into 'Low', 'Medium', and 'High' (define the ranges yourself).
+# Find the total budget of projects for the 'Research' department.
+# How many projects does each department have?
+# What is the total number of employees working on projects (assuming each project has an equal number of employees from the relevant department)?
+# Find the employee with the highest salary in the 'Marketing' department.
+# Sort the df_projects DataFrame by budget in descending order and display the top 3 most expensive projects.
+# Merge df_projects with df_departments on department_name and display the result.
+# For each department, find the project with the largest budget and list its code and budget amount.
