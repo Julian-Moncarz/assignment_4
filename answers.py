@@ -61,7 +61,7 @@ print("Employees making > 100,000 $:")
 print(big_salary_employees)
 
 # Who is the manager of the 'Development' department?
-development_manager = df_departments[df_departments['department_name'] == 'Development']['manager'])
+development_manager = df_departments[df_departments['department_name'] == 'Development']['manager']
 print("The manager of the Development department is:")
 print(development_manager)
 
@@ -71,14 +71,14 @@ print("Merged df:")
 print(merged_df.head())
 
 # Which department has the highest average salary?
-average_department_salaries = df_employees.groupby('department_name')['salary ($)'].mean().sort_values(ascending=False))
+average_department_salaries = df_employees.groupby('department_name')['salary ($)'].mean().sort_values(ascending=False)
 print("Average salaries by department:")
-print(averag_department_salaries)
+print(average_department_salaries)
 
 # Create a new column in df_employees that categorizes salaries into 'Low', 'Medium', and 'High' (define the ranges yourself).
-bins = [0, 40000, 80000, float('inf')] # This is really cool. 
-# pd.cut takes a bin (between 2 values) and label and a column. It returns the label if the value in the column is in the bin!!
+bins = [0, 40000, 80000, float('inf')]
 labels = ['low', 'medium', 'high']
+# pd.cut takes a bin (between 2 values) and label and a column. It returns the label if the value in the column is in the bin!!
 
 df_employees['salary catagory'] = pd.cut(df_employees['salary ($)'], bins = bins, labels = labels)
 print(df_employees.head())
@@ -94,13 +94,13 @@ print(projects_per_department)
 
 # What is the total number of employees working on projects (assuming each project has an equal number of employees from the relevant department)?
 # Assuming 10 employees per project
-people_on_projects = 10 * df_projects['departmen_name'].count()
+people_on_projects = 10 * df_projects['department_name'].count()
 print('Number of employees working on projects')
 print(people_on_projects)
 
 # Find the employee with the highest salary in the 'Marketing' department. 
 # Using nlargest(number, catagory)!
-highest_earner_marketing = df_employees[df_employees['department_name'] == 'Marketing'].nlargest(1, 'salary ($)')
+highest_earner_marketing = df_employees[df_employees['department_name'] == 'Marketing']['salary ($)'].max()
 print('the highest earner in the marketing department is:')
 print(highest_earner_marketing)
 
@@ -115,14 +115,23 @@ print('projects and departments merged on department_name')
 print(merged_df_2)
 
 # For each department, find the project with the largest budget and list its code and budget amount.
-biggest_project_each_department = df_projects.groupby('department_name').nlargest(1, 'budget ($)')
+biggest_project_each_department = df_projects.groupby('department_name')['budget ($)'].max()
 print('Project with largest budget for each department')
 print(biggest_project_each_department)
 
 # Calculate the average budget per employee in each department.
-
+avrg_sal_per_depo = df_employees.groupby('department_name')['salary ($)'].mean()
+print("Average salary per department")
+print(avrg_sal_per_depo)
 
 # Find the total salary expense for each department where the department manager's name starts with 'Manager_1'.
+# Use the first merged df. It has the manager name for each employee
+man1_total_sals = merged_df[merged_df['manager'] == 'Manager_1']['salary ($)'].sum()
+print("Total salary of Manager_1's employees")
+print(man1_total_sals)
+
 # Determine the total and average salary of employees for each project, considering only projects with budgets over $30,000.
+
+
 # For each manager, find out the total number of employees and the average budget of the projects in their department.
 # Create a summary table that shows, for each department, the number of projects and the average salary of employees who earn more than the average salary in their department.
