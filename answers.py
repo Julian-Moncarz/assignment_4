@@ -42,6 +42,8 @@ projects_data = {
 
 df_projects = pd.DataFrame(projects_data)
 
+# QUESTIONS
+
 
 # Display the first 5 rows of the df_employees DataFrame.
 print(df_employees.head(5))
@@ -65,20 +67,21 @@ development_manager = df_departments[df_departments['department_name'] == 'Devel
 print("The manager of the Development department is:")
 print(development_manager)
 
-# Merge df_employees with df_departments to include the manager's name for each employee.
-merged_df = pd.merge(df_employees, df_departments, on = 'department_name', how = 'left')
-print("Merged df:")
-print(merged_df.head())
+# Merge df_employees with df_departments.
+df_employees_departments = pd.merge(df_employees, df_departments, on = 'department_name', how = 'left')
+print("Employees and departments merged on department name df:")
+print(df_employees_departments.head())
 
 # Which department has the highest average salary?
 average_department_salaries = df_employees.groupby('department_name')['salary ($)'].mean().sort_values(ascending=False)
 print("Average salaries by department:")
 print(average_department_salaries)
 
-# Create a new column in df_employees that categorizes salaries into 'Low', 'Medium', and 'High' (define the ranges yourself).
+# Create a new df_employees column that say if a salary's Low, Medium or High.
 bins = [0, 40000, 80000, float('inf')]
 labels = ['low', 'medium', 'high']
-# pd.cut takes a bin (between 2 values) and label and a column. It returns the label if the value in the column is in the bin!!
+# pd.cut takes a bin (between 2 values) and label and a column. 
+# It returns the label if the value in the column is in the bin!!
 
 df_employees['salary catagory'] = pd.cut(df_employees['salary ($)'], bins = bins, labels = labels)
 print(df_employees.head())
@@ -92,8 +95,8 @@ projects_per_department = df_projects['department_name'].value_counts()
 print("Projects per department")
 print(projects_per_department)
 
-# What is the total number of employees working on projects (assuming each project has an equal number of employees from the relevant department)?
-# Assuming 10 employees per project
+# What is the total number of employees working on projects 
+# Assuming each project has 10 employees
 people_on_projects = 10 * df_projects['department_name'].count()
 print('Number of employees working on projects')
 print(people_on_projects)
@@ -110,9 +113,9 @@ print('Projects in descending order by budget')
 print(df_projects.head(3))
 
 # Merge df_projects with df_departments on department_name and display the result.
-merged_df_2 = pd.merge(df_projects, df_departments, on = 'department_name', how = 'left')
+df_projects_departments = pd.merge(df_projects, df_departments, on = 'department_name', how = 'left')
 print('projects and departments merged on department_name')
-print(merged_df_2)
+print(df_projects_departments)
 
 # For each department, find the project with the largest budget and list its code and budget amount.
 biggest_project_each_department = df_projects.groupby('department_name')['budget ($)'].max()
@@ -120,18 +123,32 @@ print('Project with largest budget for each department')
 print(biggest_project_each_department)
 
 # Calculate the average budget per employee in each department.
-avrg_sal_per_depo = df_employees.groupby('department_name')['salary ($)'].mean()
-print("Average salary per department")
-print(avrg_sal_per_depo)
+# Budget = sum the budget of all the projects in that department and divide it by the num of employees in the department.
+avrg_budget_per_employee_per_depo = df_projects.groupby('department_name')['budget ($)'].sum() / df_employees['department_name'].value_counts()
+
+print("Average budget per employee per department")
+print(avrg_budget_per_employee_per_depo)
 
 # Find the total salary expense for each department where the department manager's name starts with 'Manager_1'.
 # Use the first merged df. It has the manager name for each employee
-man1_total_sals = merged_df[merged_df['manager'] == 'Manager_1']['salary ($)'].sum()
+man1_total_sals = df_employees_departments[df_employees_departments['manager'] == 'Manager_1']['salary ($)'].sum()
 print("Total salary of Manager_1's employees")
 print(man1_total_sals)
 
 # Determine the total and average salary of employees for each project, considering only projects with budgets over $30,000.
-
+# Assuming 10 employees per project, each paid average for their department.
+# This means the total salary for the project will be 10x the avarage salary.
+# The average salary will be the average salary for the department.
+projects_salary_info = pd.merge(df_projects[df_projects['budget ($)'] > 30000], df_employees.groupby('department_name')['salary ($)'].mean(), on = 'department_name', how = 'left')
+projects_salary_info['total salary ($)'] = projects_salary_info['salary ($)'] * 10
+print('Project salary info')
+print(projects_salary_info)
 
 # For each manager, find out the total number of employees and the average budget of the projects in their department.
+employees_per_depo_man = pd.merge(employees_per_department, df_departments, on = 'department_name', how = 'left')
+manager_stats = pd.merge(employees_per_depo_man, df_projects.groupby('department_name')['budget ($)'].mean(), on = 'department_name', how = 'right')
+print('Manager employee counts and total project budget')
+print(manager_stats.drop(['department_name', 'department_id'], axis = 1))
+
 # Create a summary table that shows, for each department, the number of projects and the average salary of employees who earn more than the average salary in their department.
+
