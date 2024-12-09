@@ -74,8 +74,8 @@ print(df_employees_departments.head())
 
 # Which department has the highest average salary?
 average_department_salaries = df_employees.groupby('department_name')['salary ($)'].mean().sort_values(ascending=False)
-print("Average salaries by department:")
-print(average_department_salaries)
+print("Department with highest avarage salary:")
+print(average_department_salaries.head(1))
 
 # Create a new df_employees column that say if a salary's Low, Medium or High.
 bins = [0, 40000, 80000, float('inf')]
@@ -84,6 +84,7 @@ labels = ['low', 'medium', 'high']
 # It returns the label if the value in the column is in the bin!!
 
 df_employees['salary catagory'] = pd.cut(df_employees['salary ($)'], bins = bins, labels = labels)
+print("df_employees with salary catagories")
 print(df_employees.head())
 
 # Find the total budget of projects for the 'Research' department.
@@ -147,6 +148,7 @@ print(projects_salary_info)
 # For each manager, find out the total number of employees and the average budget of the projects in their department.
 employees_per_depo_man = df_employees.groupby('department_name').size().reset_index(name='employee_count')
 manager_stats = pd.merge(employees_per_depo_man, df_projects.groupby('department_name')['budget ($)'].mean().reset_index(), on='department_name', how='left')
+manager_stats = pd.merge(df_departments, manager_stats, on = 'department_name', how = 'left')
 print('Manager employee counts and average project budget')
 print(manager_stats)
 
